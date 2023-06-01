@@ -20,9 +20,10 @@ class _EmailAuthState extends State<EmailAuth> {
     bool isLoading = false;
     Future<String?> userLogin(
         {required final String email, required final String password}) async {
-      final response =
-          await clint.auth.signIn(email: email, password: password);
-      final user = response.data?.user;
+      final AuthResponse response =
+          await clint.auth.signInWithPassword(password: password,email: email);
+      final Session? session = response.session;
+     final User? user = response.user;
       return user?.id;
     }
 

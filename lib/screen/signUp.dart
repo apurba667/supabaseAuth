@@ -1,8 +1,7 @@
 
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabseauth/utils/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:supabseauth/utils/constant.dart';
-
 import '../widgets/customTextField.dart';
 
 class SignUp extends StatefulWidget {
@@ -19,15 +18,11 @@ class _SignUpState extends State<SignUp> {
     TextEditingController _emailController = TextEditingController();
     TextEditingController _passWordController = TextEditingController();
 
-    Future<bool> createUser(
+    Future<String?> createUser(
         {required final String email, required final String password}) async {
-      final response = await clint.auth.signUp(email, password);
-      final error = response.error;
-      if (error == null) {
-        return true;
-      } else {
-        return false;
-      }
+      final AuthResponse response = await clint.auth.signUp(password: password,email: email);
+     final User? user = response.user;
+     return user!.id;
     }
 
     return Scaffold(
@@ -55,9 +50,9 @@ class _SignUpState extends State<SignUp> {
                   final userValue = await createUser(
                       email: _emailController.text,
                       password: _passWordController.text);
-                      if(userValue == true){
+                      if(userValue != null){
                         Navigator.pushNamed(context, "/signin");
-                        context.showErrorMessage("Success");
+                        context.showErrorMessage("Send an OTP to your email");
                       }
                   setState(() {
                     isLoading = false;
